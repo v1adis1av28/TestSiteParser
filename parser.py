@@ -72,7 +72,9 @@ def parser(html):
         print(name, article, cost, volume, description)
 
 
-
+#ToDoo:
+#-Создать файл с моделей бд
+#-Добавлять информацию о товарах в базу данных
 
 if __name__ == '__main__':
     page_number = 1
