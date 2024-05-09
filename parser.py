@@ -1,6 +1,8 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 from urllib.error import URLError
+import settings
+from models import db_session, Materials
 #Ссылка на магазин, который парсим
 ROOT = 'https://vlg.saturn.net/'
 ITEMS_ROOT = "https://vlg.saturn.net/catalog/Stroymateriali/"
@@ -69,8 +71,9 @@ def parser(html):
                     description = description_element.get_text(strip=True)
             except URLError as e:
                 print(f"Error reading from {descrip_url}: {e}")
-        print(name, article, cost, volume, description)
-
+        Item = Materials(name=name,article=article,cost=int(cost),volume=volume,description=description)
+        db_session.add(Item)
+        db_session.commit()
 
 #ToDoo:
 #-Создать файл с моделей бд
@@ -78,7 +81,7 @@ def parser(html):
 
 if __name__ == '__main__':
     page_number = 1
-    print(parser(ItemsFetcher(page_number)))
+    parser(ItemsFetcher(page_number))
     #for i in range(65):
        # html = ItemsFetcher(page_number)
        # page_number += 1
